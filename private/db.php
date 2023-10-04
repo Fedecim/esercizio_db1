@@ -110,6 +110,36 @@ class Db{
     }
     public function update($parametri){
         echo "SONO IL METODO UPDATE<BR>";
+        /*
+        query = UPDATE nome_tab SET colonne WHERE colonna = condizione
+        */
+        $nomeTab = $parametri["nome_tab"];
+        $colonne = [];
+        $col_cond = $parametri["col_cond"];
+        $condizione = $parametri["condizione"];
+        foreach ($parametri["colonne"] as $colonna) {
+            $colonne[] = $colonna;
+        }
+        // tento connessione 
+        if(!$this->connessione){
+            try {
+                $this->connetti();
+            } catch (Exception $th) {
+                echo $th;
+            }
+        }
+        // preparo la query
+        $query = "UPDATE ".$nomeTab." SET ";
+        // inserisco colonna/e(campi) nella query
+        foreach ($colonne as $colonna) {
+            $query.=$colonna.",";
+        }
+        // elimino la virgola dalla fine della stringa
+        $query = substr($query,1,-1);
+        // aggiungo where e condizione
+        $query.=" WHERE ".$col_cond." = '".$condizione."'";
+        // visualizza la query (test)
+        echo $query."<br>";
     }
 }
 ?>
