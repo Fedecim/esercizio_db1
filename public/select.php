@@ -14,7 +14,7 @@
         campo ricerca : email
         campo ricerca : email,username
     </p>
-    <form action="/esercizio1/private/processa_post.php" method="post">
+    <form action="/esercizio_db1/private/processa_post.php" method="post">
         <label for="campo_ricerca">campo ricerca</label>
         <input type="text" name="campo_ricerca" id="campo_ricerca" placeholder="*">
         <input type="submit" value="invia">

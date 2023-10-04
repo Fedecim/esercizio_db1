@@ -8,7 +8,7 @@
 <body>
     <h1>insert</h1>
     <p>compila il form con i dati per aggiungere record al database</p>
-    <form action="/esercizio1/private/processa_post.php" method="post">
+    <form action="/esercizio_db1/private/processa_post.php" method="post">
         <label for="username">username</label>
         <input type="text" name="username" id="username">
         <label for="password">password</label>

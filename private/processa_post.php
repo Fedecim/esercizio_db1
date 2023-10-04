@@ -78,4 +78,15 @@ if(isset($_POST["select"])){
     }
     stampa_tab($dati);
 }
+
+// UPDATE
+if(isset($_POST["update"])){
+    try {
+        // connessione al database con dati passati al costruttore dell oggetto $db
+        echo $db->connetti();
+    } catch (Exception $th) {
+        echo $th;
+    }
+    $db->update(NULL);
+}
 ?>

@@ -108,5 +108,8 @@ class Db{
             echo "nessun risultato trovato<br>";
         }
     }
+    public function update($parametri){
+        echo "SONO IL METODO UPDATE<BR>";
+    }
 }
 ?>

@@ -8,7 +8,7 @@
 <body>
     <h1>update</h1>
     <p>compila il form con l indirizzo email del record che vuoi modificare</p>
-    <form action="/esercizio1/private/processa_post.php" method="post">
+    <form action="/esercizio_db1/private/processa_post.php" method="post">
         <label for="email">email</label>
         <input type="text" name="email" id="email">
         <input type="submit" value="invia">
