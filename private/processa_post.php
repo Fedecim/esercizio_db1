@@ -81,7 +81,7 @@ if(isset($_POST["select"])){
 
 // UPDATE
 if(isset($_POST["update"]) && isset($_POST["email"]) && !empty($_POST["email"])){
-    $email = $_POST["email"];
+    $email.="'".$_POST["email"]."'";
     try {
         // connessione al database con dati passati al costruttore dell oggetto $db
         echo $db->connetti();
@@ -94,7 +94,8 @@ if(isset($_POST["update"]) && isset($_POST["email"]) && !empty($_POST["email"]))
         "nome_tab" => "utenti",
         "col_cond"=> "email",
         "condizione"=>$email,
-        "colonne"=>$colonne
+        "colonne"=>$colonne,
+        "nuovo_valore"=>"'nuovamail@email.com'"
     );
     $db->update($param);
 }

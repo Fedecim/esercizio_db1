@@ -111,12 +111,15 @@ class Db{
     public function update($parametri){
         echo "SONO IL METODO UPDATE<BR>";
         /*
-        query = UPDATE nome_tab SET colonne WHERE colonna = condizione
+        query = UPDATE nome_tab SET colonna = nuovo_valore WHERE colonna = condizione
+        esempio :
+        $sql = "UPDATE MyGuests SET lastname='Doe' WHERE id=2";
         */
         $nomeTab = $parametri["nome_tab"];
-        $colonne = [];
+        $colonna = $parametri["colonna"];
         $col_cond = $parametri["col_cond"];
         $condizione = $parametri["condizione"];
+        $nuovo_valore = $parametri["nuovo_valore"];
         foreach ($parametri["colonne"] as $colonna) {
             $colonne[] = $colonna;
         }
@@ -129,15 +132,7 @@ class Db{
             }
         }
         // preparo la query
-        $query = "UPDATE ".$nomeTab." SET ";
-        // inserisco colonna/e(campi) nella query
-        foreach ($colonne as $colonna) {
-            $query.=$colonna.",";
-        }
-        // elimino la virgola dalla fine della stringa
-        $query = substr($query,1,-1);
-        // aggiungo where e condizione
-        $query.=" WHERE ".$col_cond." = '".$condizione."'";
+        $query = "UPDATE ".$nomeTab." SET ".$colonna." = ".$nuovo_valore." WHERE ".$col_cond."=".$condizione;
         // visualizza la query (test)
         echo $query."<br>";
     }
