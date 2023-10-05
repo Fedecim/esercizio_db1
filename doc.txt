@@ -1,0 +1,48 @@
+Il progetto è un'applicazione web che offre agli utenti un'interfaccia grafica 
+per eseguire operazioni su un database.
+
+Struttura:
+
+    ESERCIZIO1_DB1
+        PRIVATE
+            index.php
+            db.php (modulo classe Db)
+            funzioni.php (contiene funzione per stampare tabella html)
+            processa_post.php (modulo che processa e prepara i dati ricevuti dal form)
+        PUBLIC
+            index.php (homepage del sito, contiene menu per le operazioni)
+            insert.html
+            update.html
+            delete.html
+            select.html
+
+Frontend:
+La pagina index.php funge da homepage e contiene un menu con i seguenti link:
+
+    insert: inserisce dati nel database
+    update: aggiorna dati nel database
+    delete: cancella dati nel database
+    select: seleziona dati dal database e li visualizza in una tabella HTML.
+
+Quando l'utente clicca su un link, viene reindirizzato a una pagina con un form dedicato 
+per l'operazione selezionata (insert.html, update.html, delete.html, select.html). 
+Ogni form contiene un campo nascosto (hidden) che specifica il tipo di operazione richiesta. 
+Ad esempio, nel form insert.html:
+
+<form action="/esercizio_db1/private/processa_post.php" method="post">
+    <label for="username">username</label>
+    <input type="text" name="username" id="username">
+    <label for="password">password</label>
+    <input type="text" name="password" id="password">
+    <label for="email">email</label>
+    <input type="text" name="email" id="email">
+    <input type="submit" value="invia">
+    <input type="hidden" name="insert">
+</form><br>
+
+Backend:
+I dati inviati dai form vengono processati dal modulo processa_post.php, che riconosce 
+l'operazione richiesta attraverso controlli sulla variabile $_POST. 
+Questi dati vengono preparati per la query e inviati a un oggetto della classe Db. 
+La classe Db si connette al database e esegue le operazioni di insert, update, delete e select 
+utilizzando il metodo procedurale mysqli.

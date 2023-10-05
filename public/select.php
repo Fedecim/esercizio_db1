@@ -14,9 +14,17 @@
         campo ricerca : email
         campo ricerca : email,username
     </p>
+    <p>
+    Aggiungi una Condizione (Opzionale)
+    Se vuoi filtrare i risultati basandoti su una condizione specifica, compila i campi "Campo Condizione" e "Valore Condizione".
+    </p>
     <form action="/esercizio_db1/private/processa_post.php" method="post">
         <label for="campo_ricerca">campo ricerca</label>
         <input type="text" name="campo_ricerca" id="campo_ricerca" placeholder="*">
+        <label for="col_cond">campo condizione</label>
+        <input type="text" name="col_cond" id="col_cond">
+        <label for="valore_cond">valore condizione</label>
+        <input type="text" name="condizione" id="condizione">
         <input type="submit" value="invia">
         <input type="hidden" name="select">
     </form><br>

@@ -28,8 +28,8 @@ class Db{
         }
     }
 
-    public function delete($tabella,$colonna,$condizione)
-    {
+    public function delete($tabella,$colonna,$condizione){
+        // DELETE FROM table_name WHERE some_column = some_value 
         if(!$this->connessione){
             try {
                 $this->connetti();
@@ -50,7 +50,13 @@ class Db{
         }
         mysqli_close($this->connessione);
     }
+
     public function insert($parametri){
+        // INSERT INTO table_name (column1, column2, column3,...)VALUES (value1, value2, value3,...)
+        $nomeTab = $parametri["nome_tab"];
+        $colonne = $parametri["campi"];
+        $valori = $parametri["valori"];
+        // colonne and valori must be the same dimension (number of elements)
         if(!$this->connessione){
             try {
                 $this->connetti();
@@ -58,21 +64,22 @@ class Db{
                 echo $th;
             }
         }
-        $nomeTab = $parametri["nome_tab"];
         $query = "INSERT INTO ".$nomeTab."(";
-        foreach ($parametri["campi"] as $campo) {
-            $query.=$campo.",";
+        foreach ($colonne as $colonna) {
+            $query.=$colonna.",";
         }
         // elimino la ',' rimasta in fondo alla stringa
         $query = substr($query,0,-1);
         $query.=")VALUES(";
-        foreach ($parametri["valori"] as $valore) {
+        foreach ($valori as $valore) {
             $query.=$valore.",";
         }
         // elimino la ',' rimasta in fondo alla stringa
         $query = substr($query,0,-1);
-
         $query.=")";
+
+        echo $query;
+
         if(mysqli_query($this->connessione,$query)){
 
             echo "Record aggiunto al database.";
@@ -83,6 +90,11 @@ class Db{
         mysqli_close($this->connessione);
     }
     public function select($parametri){
+        // SELECT column_name(s) FROM table_name WHERE column_name operator value  
+        $colonne = $parametri["colonne"];
+        $nome_tab = $parametri["nome_tab"];
+        $col_cond = $parametri["col_cond"];
+        $condizione = $parametri["condizione"];
         if(!$this->connessione){
             try {
                 $this->connetti();
@@ -90,9 +102,17 @@ class Db{
                 echo $th;
             }
         }
-        $campo = $parametri["campo_ricerca"];
         $query = "SELECT ";
-        $query.=$parametri["campo_ricerca"]." FROM utenti";
+        $campi = [];
+        foreach ($colonne as $colonna) {
+            $query.=$colonna.",";
+        }
+        $query = substr($query,0,-1);
+        $query.=" FROM ".$nome_tab;
+        // controllo se esiste la condizione (nel caso aggiungere where alla query)
+        if($condizione !== ""){
+            $query.=" WHERE ".$col_cond."=".$condizione;
+        }
         echo $query."<br>";
         $dati = mysqli_query($this->connessione,$query);
         $risultato_array = array();
@@ -148,6 +168,7 @@ class Db{
         else{
             throw new Exception("Modifica non riuscita: " . mysqli_error($this->connessione));
         }
+        mysqli_close($this->connessione);
     }
 }
 ?>

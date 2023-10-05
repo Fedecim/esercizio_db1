@@ -33,17 +33,31 @@ if(isset($_POST["delete"]) && isset($_POST["email"])){
     } 
 }
 // INSERT
-if(isset($_POST["insert"])){
+if(isset($_POST["insert"]) && isset($_POST["email"])){
     // aggiungo apici inizio e fine stringa (i tre campi sono di tipo stringa per il dbms)
-    $username .= "'".$_POST["username"]."'";
-    $password = "'".$_POST["password"]."'";
+    //$username .= "'".$_POST["username"]."'";
+    //$password = "'".$_POST["password"]."'";
     $email = "'".$_POST["email"]."'";
+    $campi = [];
+    $valori = [];
+    $campi[] = "email";
+    $valori[] = $email;
+    if(!empty($_POST["username"])){
+        $campi[] = "username";
+        $valori[] = $_POST["username"];
+    }
+    if(!empty($_POST["password"])){
+        $campi[] = "password";
+        $valori[] = $_POST["password"];
+    }
     // array contenente dati per la query insert
     $param = array(
-        "nome_tab" => "utenti",
-        "campi"=>["username","password","email"],
-        "valori"=>[$username,$password,$email]
+        "nome_tab"=>"utenti",
+        "email" => $email,
+        "campi"=>$campi,
+        "valori"=>$valori
     );
+    stampa_array($param);
     // il metodo connetti restiuisce un eccezione
     try {
         // connessione al database con dati passati al costruttore dell oggetto $db
@@ -63,14 +77,39 @@ if(isset($_POST["select"])){
     // inizializzo array con i campi
     if(isset($_POST["campo_ricerca"]) && !empty($_POST["campo_ricerca"]))
     {
-        $param["campo_ricerca"] = $_POST["campo_ricerca"];
+        $campi = $_POST["campo_ricerca"];
     }
-    try {
+    // controllo se campo ricerca ha piu valori separati da virgola
+    $colonne = [];
+    if(strpos($campi,',') !== false){
+        $colonne = explode(",",$campi);
+    }
+    else
+    {
+        $colonne[] = $campi;
+    }
+    if(!empty($_POST["col_cond"]) && !empty($_POST["condizione"])){
+        $col_cond = $_POST["col_cond"];
+        $condizione = "'".$_POST["condizione"]."'";
+    }
+    else
+    {
+        $col_cond = "";
+        $condizione = "";
+    }
+    // preparo array con dati 
+    $param = array(
+        "nome_tab" => "utenti",
+        "colonne" => $colonne,
+        "col_cond" => $col_cond,
+        "condizione" => $condizione
+    );
+    /*try {
         // connessione al database con dati passati al costruttore dell oggetto $db
         echo $db->connetti();
     } catch (Exception $th) {
         echo $th;
-    }
+    }*/
     try {
         $dati = $db->select($param);
     } catch (Exception $th) {
