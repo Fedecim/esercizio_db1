@@ -78,7 +78,7 @@ class Db{
             echo "Record aggiunto al database.";
         }
         else{
-            throw new Exception("Cancellazione non riuscita: " . mysqli_error($this->connessione));
+            throw new Exception("Inserimento dati non riuscito: " . mysqli_error($this->connessione));
         }
         mysqli_close($this->connessione);
     }
@@ -115,14 +115,11 @@ class Db{
         esempio :
         $sql = "UPDATE MyGuests SET lastname='Doe' WHERE id=2";
         */
-        $nomeTab = $parametri["nome_tab"];
-        $colonna = $parametri["colonna"];
+        $nome_tab = $parametri["nome_tab"];
+        $campi = $parametri["campi"];
+        $valori = $parametri["valori"];
         $col_cond = $parametri["col_cond"];
         $condizione = $parametri["condizione"];
-        $nuovo_valore = $parametri["nuovo_valore"];
-        foreach ($parametri["colonne"] as $colonna) {
-            $colonne[] = $colonna;
-        }
         // tento connessione 
         if(!$this->connessione){
             try {
@@ -132,9 +129,25 @@ class Db{
             }
         }
         // preparo la query
-        $query = "UPDATE ".$nomeTab." SET ".$colonna." = ".$nuovo_valore." WHERE ".$col_cond."=".$condizione;
-        // visualizza la query (test)
-        echo $query."<br>";
+        // preparo la query update
+        $query = "UPDATE ".$nome_tab." SET ";
+        for ($i=0; $i < count($valori) ; $i++) { 
+            $query.=$campi[$i]." = ".$valori[$i].",";
+        }
+        // elimino la ',' rimasta in fondo alla stringa
+        $query = substr($query,0,-1);
+        $query.=" WHERE ".$col_cond." = ".$condizione;
+        echo $query;
+        // lancio la query
+        if(mysqli_query($this->connessione,$query)){
+            if(mysqli_affected_rows($this->connessione) == 0){
+                return false;
+            }
+            echo "Modifica avvenuta con successo.<br>";
+        }
+        else{
+            throw new Exception("Modifica non riuscita: " . mysqli_error($this->connessione));
+        }
     }
 }
 ?>

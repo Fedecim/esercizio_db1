@@ -34,7 +34,7 @@ if(isset($_POST["delete"]) && isset($_POST["email"])){
 }
 // INSERT
 if(isset($_POST["insert"])){
-    // aggiungo apici inizio e fine stringa (altrimenti errore tipo dbms)
+    // aggiungo apici inizio e fine stringa (i tre campi sono di tipo stringa per il dbms)
     $username .= "'".$_POST["username"]."'";
     $password = "'".$_POST["password"]."'";
     $email = "'".$_POST["email"]."'";
@@ -80,23 +80,40 @@ if(isset($_POST["select"])){
 }
 
 // UPDATE
-if(isset($_POST["update"]) && isset($_POST["email"]) && !empty($_POST["email"])){
-    $email.="'".$_POST["email"]."'";
-    try {
-        // connessione al database con dati passati al costruttore dell oggetto $db
-        echo $db->connetti();
-    } catch (Exception $th) {
-        echo $th;
+// UPDATE utenti SET username = 'nuovaUsername' WHERE email='utente2@email.com';
+// nometabella, colonna da modificare, valore da inserire WHERE colonna_condizione = condizione
+if(isset($_POST["update"]) && isset($_POST["campi"]) && isset($_POST["valori"])){
+    $campi = $_POST["campi"]; // rappresentano i campi da modificare (dopo il SET)
+    $valori = $_POST["valori"]; // rappresenta i valori da assegnare i campi (nuovi valori dopo modifica)
+    $nome_tab = "utenti"; // nome della tabella
+    $col_cond = "email"; // colonna condizione (dopo WHERE)
+    $condizione = "'".$_POST["email"]."'"; // condizione
+    $campi_array = [];
+    $valori_array = [];
+    // i valori di campi e valori sono delle stringhe con i valori separati da , (se sono + di uno)
+    if(strpos($campi,',') !== false){ // campi / valori multipli
+        $campi_array = explode(",",$campi);
+        $valori_array = explode(",",$valori);
     }
-    // preparo i dati da passare al metodo update dell oggetto DB
-    $colonne[] = "email";
+    else // campo e valore singoli
+    {
+        $valori = "'".$valori."'";
+        $campi_array[] = $campi;
+        $valori_array[] = $valori;
+    }
+    if(count($campi_array) != count($valori_array)){
+        throw new Exception("Errore: i valori e i campi devono essere di numero uguale<br>");
+    }
+    // preparo l'array con i dati arrivati dal form
     $param = array(
-        "nome_tab" => "utenti",
-        "col_cond"=> "email",
-        "condizione"=>$email,
-        "colonne"=>$colonne,
-        "nuovo_valore"=>"'nuovamail@email.com'"
+        "campi"=>$campi_array,
+        "valori"=>$valori_array,
+        "nome_tab"=>$nome_tab,
+        "col_cond"=>$col_cond,
+        "condizione"=>$condizione
     );
-    $db->update($param);
+    if(!$db->update($param)){
+        echo "Modifica non riuscita"; 
+    }
 }
 ?>
