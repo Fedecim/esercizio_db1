@@ -53,11 +53,11 @@ if(isset($_POST["insert"]) && isset($_POST["email"])){
     // array contenente dati per la query insert
     $param = array(
         "nome_tab"=>"utenti",
-        "email" => $email,
+        "email" => "'".$email."'",
         "campi"=>$campi,
         "valori"=>$valori
     );
-    stampa_array($param);
+    //stampa_array($param);
     // il metodo connetti restiuisce un eccezione
     try {
         // connessione al database con dati passati al costruttore dell oggetto $db
