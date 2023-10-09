@@ -15,20 +15,36 @@ function stampa_array($array){
 }
 
 function stampa_tab($array){
-    echo "<table border= 1px black'>";
-    echo "<tr>";
-    echo "<th>username</th>";
-    echo "<th>email</th>";
-    echo "<th>password</th>";
-    echo "</tr>";
-    foreach ($array as $riga) 
-    {
-        echo "<tr>";
-        echo "<td>".$riga["username"]."</td>";
-        echo "<td>".$riga["email"]."</td>";
-        echo "<td>".$riga["password"]."</td>";
-        echo "</tr>";
+    
+    echo '<table border="1">';
+    
+    // Controllo se l'array è vuoto
+    if (!empty($array)) {
+        // array_keys restituisce tutte le chiavi di un array associativo
+        // se l'array indicizzato non è vuoto uso il primo elemento dell array per recuperare i nomi delle chiavi
+        $colonne = array_keys($array[0]);
+        
+        // Stampo l'intestazione della tabella con le chiavi
+        echo '<tr>';
+        foreach ($colonne as $colonna) {
+            echo '<th>' . $colonna. '</th>';
+        }
+        echo '</tr>';
+        
+        // Stampo i dati nella tabella
+        foreach ($array as $record) {
+            echo '<tr>';
+            foreach ($record as $campo) {
+                echo '<td>' . $campo . '</td>';
+            }
+            echo '</tr>';
+        }
+    } else {
+        // Se l'array è vuoto stampo messaggio : nessun risultato trovato
+        echo '<p>Nessun risultato trovato</p><br>';
     }
-    echo "</table>";
+    
+    echo '</table>';
+    
 }
 ?>

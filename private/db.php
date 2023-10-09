@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\type;
+
 class Db{
     private $utente;
     private $nome_server;
@@ -129,7 +132,6 @@ class Db{
         }
     }
     public function update($parametri){
-        echo "SONO IL METODO UPDATE<BR>";
         /*
         query = UPDATE nome_tab SET colonna = nuovo_valore WHERE colonna = condizione
         esempio :
@@ -160,6 +162,7 @@ class Db{
         echo $query;
         // lancio la query
         if(mysqli_query($this->connessione,$query)){
+            echo "<br>RIGHE MODIFICATE: ".mysqli_affected_rows($this->connessione)."<br>";
             if(mysqli_affected_rows($this->connessione) == 0){
                 return false;
             }
@@ -169,6 +172,7 @@ class Db{
             throw new Exception("Modifica non riuscita: " . mysqli_error($this->connessione));
         }
         mysqli_close($this->connessione);
+        return true;
     }
 }
 ?>
